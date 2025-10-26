@@ -1,9 +1,10 @@
 ﻿
+using com.calitha.commons;
+using com.calitha.goldparser.lalr;
 using System;
 using System.IO;
 using System.Runtime.Serialization;
-using com.calitha.goldparser.lalr;
-using com.calitha.commons;
+using System.Text;
 
 namespace com.calitha.goldparser
 {
@@ -993,36 +994,62 @@ namespace com.calitha.goldparser
             throw new RuleException("Unknown rule");
         }
 
+        // ====== Campos de la clase ======
+        private readonly StringBuilder _sb = new StringBuilder();
+        private bool _huboLexico = false;
+        private bool _huboSintactico = false;
+        private bool _aceptado = false;
+
+        // ====== Método para preparar una nueva corrida ======
+        private void PrepararNuevaCorrida()
+        {
+            _sb.Clear();
+            _huboLexico = false;
+            _huboSintactico = false;
+            _aceptado = false;
+        }
+
+        // ====== Eventos del parser/scanner ======
         private void AcceptEvent(LALRParser parser, AcceptEventArgs args)
         {
-            cadenaErrores = "Todo salio Bien";
-            MessageBox.Show("Compilo Exitosamente", "A V I S O", MessageBoxButtons.OK, MessageBoxIcon.Information);
-
+            _aceptado = true;
         }
 
         private void TokenErrorEvent(LALRParser parser, TokenErrorEventArgs args)
         {
-            string message = "Error Lexico: '" + args.Token.ToString() + "'" + "\nLinea: " + args.Token.Location.LineNr;
+            _huboLexico = true;
 
-            cadenaErrores = cadenaErrores + message + "\n";
-            //args.Continue = true;
+            int linea = args.Token.Location.LineNr + 1; 
+            int columna = args.Token.Location.ColumnNr + 1;
+
+            _sb.AppendLine($"[LEX] Caracter no reconocido '{args.Token}' en línea {linea}, col {columna}.");
+
+            // Encontrar más errores léxicos:
+            args.Continue = true;
         }
 
         private void ParseErrorEvent(LALRParser parser, ParseErrorEventArgs args)
         {
-            string message = "Error Sintactico: '" + args.UnexpectedToken.ToString() + "'" + "\nLinea: " + args.UnexpectedToken.Location.LineNr;
+            _huboSintactico = true;
 
-            cadenaErrores = cadenaErrores + message + "\n";
-            args.Continue = ContinueMode.Stop;
+            int linea = args.UnexpectedToken.Location.LineNr + 1;
+            int columna = args.UnexpectedToken.Location.ColumnNr + 1;
+
+            _sb.AppendLine($"[SYN] Token inesperado '{args.UnexpectedToken}' en línea {linea}, col {columna}.");
+
+            // Encontrar más errores de sintaxis:
+            args.Continue = ContinueMode.Stop; 
         }
 
-
-        // Creamos una variable cadena Errores
-        private string cadenaErrores;
-
+        // ====== Exponer el resultado ======
         public string getCadenaErrores()
         {
-            return cadenaErrores;
+            // Si no hubo errores y el parser aceptó, devolvemos el OK
+            if (_aceptado && !_huboLexico && !_huboSintactico)
+                return "Todo salio Bien";
+
+            // Si hubo errores, devolvemos el acumulado
+            return _sb.ToString();
         }
 
     }
