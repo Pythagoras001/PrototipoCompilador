@@ -1,4 +1,4 @@
-# 🧠 Prototipo de Compilador en C# con GOLD Parser y Windows Forms
+# 🧠 Prototipo de Compilador en C# con GOLD Parser y Windows Forms 1 Nov - 2025
 
 Este proyecto implementa un **prototipo funcional de compilador** desarrollado en **C# (.NET Framework)** utilizando la herramienta **GOLD Parser Engine**.  
 El sistema cuenta con una **interfaz gráfica en Windows Forms**, capaz de **analizar código fuente**, **verificar la validez del lenguaje**, y **detectar errores léxicos y sintácticos** en tiempo de ejecución.
