@@ -1,0 +1,58 @@
+main() {
+    int $a = 3 + 4;
+    double $d = 2.50;
+    bool $flag = true;
+    bool $a, int $b, double $c;
+   
+    $a = $a + 1;
+    $a++;
+    $a--;
+
+    if (($a>5) && (true)) {
+        $a = $a + 2;
+    } else {
+        $a = $a - 1;
+    }
+
+    while (($a<10) || (false)){
+        $a++;
+    }
+
+    do {
+        $a = $a * 2;
+    } while ($a<=20);
+
+    switch ( $a ) {
+        case 1: $a = $a + 10;
+           break;
+        case 2: $a = $a + 20;
+           break;  
+        default: $a = $a + 30; 
+           break;
+    }
+
+    for (int $j=0; $j<3; $j++){
+        $a = $a + $j;
+    }
+
+    for ( int $i : $lista ) {
+        $a = $a + $i;
+        $mostrar();
+    }
+
+    for (int $k : $getLista()){
+        $a = $a + $k;
+    }
+
+    $mostrar();
+}
+
+void $mostrar() {
+    int $x = 1;
+    $x++;
+}
+
+void $getLista() {
+    int $tmp = 0;
+    $tmp = $tmp;
+}
