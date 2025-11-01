@@ -1000,15 +1000,6 @@ namespace com.calitha.goldparser
         private bool _huboSintactico = false;
         private bool _aceptado = false;
 
-        // ====== Método para preparar una nueva corrida ======
-        private void PrepararNuevaCorrida()
-        {
-            _sb.Clear();
-            _huboLexico = false;
-            _huboSintactico = false;
-            _aceptado = false;
-        }
-
         // ====== Eventos del parser/scanner ======
         private void AcceptEvent(LALRParser parser, AcceptEventArgs args)
         {
